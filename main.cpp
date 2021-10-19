@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <cstring>
 #include "input_data.hpp"
 
 int main(int argc, char **argv){
@@ -18,10 +20,22 @@ int main(int argc, char **argv){
         std::cout << uso_esperado;
         return 1;
     }
-    char input_line[256];
-    input_file.getline(input_line, 256);
-    input_data::chemical_component a(input_line);
+
+    std::cout << "Lendo os dados do arquivo " << argv[1] << "!\n";
+    auto components = data::read_ifstream(&input_file);
     input_file.close();
-    std::cout << a.H;
+    std::cout << "Leitura finalizada!\nDigite o nome do arquivo para salvar os dados tratados: ";
+    std::ofstream new_file;
+    do{
+        char new_path[50];
+        std::cin >> new_path;
+        new_file.open(new_path, std::ofstream::out);
+    }while(!new_file.is_open());
+
+    data::write_modified(components, &new_file);
+    new_file.close();
+    
+    std::cout << "Dados tratados salvos!\n";
+
     return 0;
 }

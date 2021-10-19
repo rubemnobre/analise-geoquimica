@@ -1,9 +1,12 @@
 #ifndef INPUT_DATA_HPP
 #define INPUT_DATA_HPP
 
-#include<string>
+#include <fstream>
+#include <string>
+#include <vector>
+#define N_COLS 7
 
-namespace input_data{
+namespace data{
     class chemical_component{
         public:
             std::string cls;
@@ -12,8 +15,16 @@ namespace input_data{
             int C;
             int H;
             int N;
-            chemical_component(char *line_input);
+            int DBE;
+            chemical_component(std::vector<std::string> input_cols);
+            std::string to_line();
     };
+
+    std::vector<chemical_component> read_ifstream(std::ifstream *input_data);
+
+    std::vector<std::string> split_line(char *str);
+
+    int write_modified(std::vector<chemical_component> components, std::ofstream *file);
 }
 
 #endif
