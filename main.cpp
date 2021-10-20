@@ -36,22 +36,16 @@ void geochemical_study(std::vector<data::chemical_component> components){
 
 int main(int argc, char **argv){
     std::cout << "Analise Geoquimica - Outubro 2021\n";
-    auto uso_esperado = "Uso esperado deste programa:\n\tgeoquim.exe caminho_do_arquivo.txt\n";
+
     std::ifstream input_file;
-    if(argc == 2){
-        input_file.open(argv[1], std::ifstream::in);
-        if(!input_file.is_open()){
-            std::cout << "Erro ao abrir o arquivo!\n";
-            std::cout << uso_esperado;
-            return 1;
-        }
-    }else{
-        std::cout << "Numero de argumentos incorreto!\n";
-        std::cout << uso_esperado;
-        return 1;
+    std::string nome;
+    while(!input_file.is_open()){
+        std::cout << "Digite o nome do arquivo: ";
+        std::cin >> nome;
+        input_file.open(nome, std::ifstream::in);
     }
 
-    std::cout << "Lendo os dados do arquivo " << argv[1] << "!\n";
+    std::cout << "Lendo os dados do arquivo " << nome << "!\n";
     auto components = data::read_ifstream(&input_file);
     input_file.close();
     std::cout << "Leitura finalizada!\nDigite o nome do arquivo para salvar os dados tratados: ";
