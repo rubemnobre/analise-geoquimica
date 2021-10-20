@@ -24,7 +24,13 @@ namespace data{
 
     std::vector<std::string> split_line(char *str);
 
-    int write_modified(std::vector<chemical_component> components, std::ofstream *file);
+    void write_modified(std::vector<chemical_component> components, std::ofstream *file);
+}
+
+namespace analysis{
+    std::vector<std::string> get_classes(std::vector<data::chemical_component> components);
+
+    float total_class_intensity(std::vector<data::chemical_component> components, std::string cls);
 }
 
 #endif

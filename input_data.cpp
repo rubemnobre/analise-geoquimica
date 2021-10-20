@@ -69,11 +69,10 @@ std::string data::chemical_component::to_line(){
     return cls + "\t" + mol_formula + "\t" + std::to_string(C) + "\t" + std::to_string(H) + "\t" + std::to_string(N) + "\t" + std::to_string(DBE) + "\t" + std::to_string(intensity) + "\n";
 }
 
-int data::write_modified(std::vector<data::chemical_component> components, std::ofstream *file){
+void data::write_modified(std::vector<data::chemical_component> components, std::ofstream *file){
     int n = components.size();
     *file << "Class\tMol. Formula\tC\tH\tN\tDBE\tIntensity\n";
     for(int i = 0; i < n; i++){
         *file << components[i].to_line();
     }
-    return 0;
 }
