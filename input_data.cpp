@@ -61,7 +61,6 @@ std::vector<data::chemical_component> data::read_ifstream(std::ifstream *input){
             data_vector.push_back(data::chemical_component(input_cols));
         }
     }
-    data_vector.erase(data_vector.begin());
     return data_vector;
 }
 
