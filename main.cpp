@@ -21,16 +21,13 @@ void relative_abundancy(data::component_vector components, std::ofstream *file){
     *file << "\nAbundancia das classes heteroatomicas\n";
     *file << "Intensidade total: " << total << "\n";
     *file << "Classe\tInt. Relativa\n";
-    for(int i = 0; i < n; i++){
-        *file << classes[i] << '\t' << abundancies[i]/total << "\n";
-    } 
-    *file << '\n';
-
     std::cout << "\nIntensidade total: " << total << "\n";
     std::cout << "Classe\tInt. Relativa\n";
     for(int i = 0; i < n; i++){
+        *file << classes[i] << '\t' << abundancies[i]/total << "\n";
         std::cout << classes[i] << '\t' << abundancies[i]/total << "\n";
     } 
+    *file << '\n';
     std::cout << '\n';
 }
 
