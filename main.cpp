@@ -34,58 +34,65 @@ void relative_abundancy(data::component_vector components, std::ofstream *file){
 }
 
 void petrochemical_study(data::component_vector components, std::ofstream *file){
-    auto classes = analysis::get_classes(components);
-    int n = classes.size();
-    std::cout << '\n';
-    for(int i = 0; i < n; i++){
-        std::cout << i << ". " << classes[i] << '\n';
-    }
-    int i_sel = -1;
-    while(i_sel > n - 1 || i_sel < 0){
-        std::cout << "Selecione a classe heteroatomica: ";
-        std::cin >> i_sel;
-    }
-
-    auto total_class = analysis::total_class_intensity(components, classes[i_sel]);
-    auto class_components = analysis::components_per_class(components, classes[i_sel]);
-    
-    int dbe_ant = class_components[0].DBE;
-    float total = 0.0;
-    std::cout << "\nIntensidade total da classe: " << total_class << "\nDBE\tInt. Relativa\n";
-    *file << "\nEstudo Petroleoquimico da Classe Heteroatomica " << classes[i_sel];
-    *file << "\nIntensidade total da classe: " << total_class << "\nDBE\tInt. Relativa\n";
-    for(auto i : class_components){
-        if(dbe_ant != i.DBE){
-            std::cout << dbe_ant << '\t' << total/total_class << '\n';
-            *file     << dbe_ant << '\t' << total/total_class << '\n';
-            total = 0.0;
+    int choice = 0;
+    std::cout << "1. Calcular abundancia relativa do DBE por classe\n2. Calcular distribuicao de numeros carbono por DBE";
+    std::cout << "\nEscolha: ";
+    std::cin >> choice;
+    if(choice == 1){
+        auto classes = analysis::get_classes(components);
+        int n = classes.size();
+        std::cout << '\n';
+        for(int i = 0; i < n; i++){
+            std::cout << i << ". " << classes[i] << '\n';
         }
-        total += i.intensity;
-        dbe_ant = i.DBE;
-    }
-    *file << '\n';
+        int i_sel = -1;
+        while(i_sel > n - 1 || i_sel < 0){
+            std::cout << "Selecione a classe heteroatomica: ";
+            std::cin >> i_sel;
+        }
 
-    int dbe_sel = 0;
-    std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
-    std::cin >> dbe_sel;
-
-    auto compare_c = [] (data::chemical_component a, data::chemical_component b) { return a.C < b.C; };
-    int min_c = std::min_element(class_components.begin(), class_components.end(), compare_c)->C;
-    
-    int max_c = std::max_element(class_components.begin(), class_components.end(), compare_c)->C;
-    
-    std::cout << "\nDistribuicao da quantidade de carbonos no DBE" << dbe_sel << " com a classe " << classes[i_sel] << '\n';
-    *file << "Distribuicao da quantidade de carbonos no DBE" << dbe_sel << " com a classe " << classes[i_sel] << '\n';
-    std::cout << "Num. C\tTotal\n";
-    *file << "Num. C\tTotal\n";
-    for(int i = min_c; i <= max_c; i++){
-        int total = 0;
-        for(auto j : class_components) if(j.C == i) total++;
-        std::cout << i << '\t' << total << '\n';
-        *file << i << '\t' << total << '\n';
+        auto total_class = analysis::total_class_intensity(components, classes[i_sel]);
+        auto class_components = analysis::components_per_class(components, classes[i_sel]);
+        
+        int dbe_ant = class_components[0].DBE;
+        float total = 0.0;
+        std::cout << "\nIntensidade total da classe: " << total_class << "\nDBE\tInt. Relativa\n";
+        *file << "\nAbundancia relativa do DBE na Classe Heteroatomica " << classes[i_sel];
+        *file << "\nIntensidade total da classe: " << total_class << "\nDBE\tInt. Relativa\n";
+        for(auto i : class_components){
+            if(dbe_ant != i.DBE){
+                std::cout << dbe_ant << '\t' << total/total_class << '\n';
+                *file     << dbe_ant << '\t' << total/total_class << '\n';
+                total = 0.0;
+            }
+            total += i.intensity;
+            dbe_ant = i.DBE;
+        }
+        *file << '\n';
     }
-    *file << '\n';
-    std::cout << '\n';
+    if(choice == 2){
+        int dbe_sel = 0;
+        std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
+        std::cin >> dbe_sel;
+
+        auto compare_c = [] (data::chemical_component a, data::chemical_component b) { return a.C < b.C; };
+        int min_c = std::min_element(components.begin(), components.end(), compare_c)->C;
+        
+        int max_c = std::max_element(components.begin(), components.end(), compare_c)->C;
+        
+        std::cout << "\nDistribuicao da quantidade de carbonos no DBE" << dbe_sel << '\n';
+        *file << "Distribuicao da quantidade de carbonos no DBE" << dbe_sel << '\n';
+        std::cout << "Num. C\tTotal\n";
+        *file << "Num. C\tTotal\n";
+        for(int i = min_c; i <= max_c; i++){
+            float total = 0.0;
+            for(auto j : components) if(j.C == i && j.DBE == dbe_sel) total += j.intensity;
+            std::cout << i << '\t' << total << '\n';
+            *file << i << '\t' << total << '\n';
+        }
+        *file << '\n';
+        std::cout << '\n';
+    }
 }
 
 void geochemical_study(data::component_vector components, std::ofstream *file){
