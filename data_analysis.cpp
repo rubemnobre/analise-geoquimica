@@ -1,6 +1,6 @@
 #include "input_data.hpp"
 
-std::vector<std::string> analysis::get_classes(std::vector<data::chemical_component> components){
+std::vector<std::string> analysis::get_classes(data::component_vector components){
     std::vector<std::string> classes;
     int n = components.size();
     classes.push_back(components[0].cls);
@@ -10,11 +10,15 @@ std::vector<std::string> analysis::get_classes(std::vector<data::chemical_compon
     return classes;
 }
 
-float analysis::total_class_intensity(std::vector<data::chemical_component> components, std::string cls){
+float analysis::total_class_intensity(data::component_vector components, std::string cls){
     float total = 0.0;
     int n = components.size();
     for(int i = 0; i < n; i++){
         if(components[i].cls == cls) total += components[i].intensity;
     }
     return total;
+}
+
+data::component_vector analysis::components_per_class(data::component_vector components, std::string cls){
+
 }

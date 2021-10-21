@@ -7,7 +7,7 @@
 #include <iomanip>
 #include "input_data.hpp"
 
-void relative_abundancy(std::vector<data::chemical_component> components, std::ofstream *file){
+void relative_abundancy(data::component_vector components, std::ofstream *file){
     auto classes = analysis::get_classes(components);
     const int n = classes.size();
     std::vector<float> abundancies;
@@ -34,11 +34,11 @@ void relative_abundancy(std::vector<data::chemical_component> components, std::o
     std::cout << '\n';
 }
 
-void petrochemical_study(std::vector<data::chemical_component> components, std::ofstream *file){
-    
+void petrochemical_study(data::component_vector components, std::ofstream *file){
+    auto classes = analysis::get_classes(components);
 }
 
-void geochemical_study(std::vector<data::chemical_component> components, std::ofstream *file){
+void geochemical_study(data::component_vector components, std::ofstream *file){
     
 }
 

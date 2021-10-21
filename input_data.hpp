@@ -20,17 +20,21 @@ namespace data{
             std::string to_line();
     };
 
-    std::vector<chemical_component> read_ifstream(std::ifstream *input_data);
+    typedef std::vector<chemical_component> component_vector;
+
+    component_vector read_ifstream(std::ifstream *input_data);
 
     std::vector<std::string> split_line(char *str);
 
-    void write_modified(std::vector<chemical_component> components, std::ofstream *file);
+    void write_modified(component_vector components, std::ofstream *file);
 }
 
 namespace analysis{
-    std::vector<std::string> get_classes(std::vector<data::chemical_component> components);
+    std::vector<std::string> get_classes(data::component_vector components);
 
-    float total_class_intensity(std::vector<data::chemical_component> components, std::string cls);
+    float total_class_intensity(data::component_vector components, std::string cls);
+
+    data::component_vector components_per_class(data::component_vector components, std::string cls);
 }
 
 #endif

@@ -50,8 +50,8 @@ data::chemical_component::chemical_component(std::vector<std::string> input_cols
     DBE = C - H/2.0 + N/2.0 + 1.0;
 }
 
-std::vector<data::chemical_component> data::read_ifstream(std::ifstream *input){
-    std::vector<data::chemical_component> data_vector;
+data::component_vector data::read_ifstream(std::ifstream *input){
+    data::component_vector data_vector;
     char header[MAX_WIDTH];
     input->getline(header, MAX_WIDTH);
     while(!input->eof()){
@@ -74,7 +74,7 @@ std::string data::chemical_component::to_line(){
     return cls + "\t\t" + mol_formula + "  \t" + c_str + "\t" + h_str + "\t" + n_str + "\t" + dbe_str + "\t" + std::to_string(intensity) + "\n";
 }
 
-void data::write_modified(std::vector<data::chemical_component> components, std::ofstream *file){
+void data::write_modified(data::component_vector components, std::ofstream *file){
     int n = components.size();
     *file << "Class\tMol. Formula\tC\tH\tN\tDBE\tIntensity\n";
     for(int i = 0; i < n; i++){
