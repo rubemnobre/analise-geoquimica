@@ -5,6 +5,7 @@
 #include <vector>
 #include <array>
 #include <iomanip>
+#include <algorithm>
 #include "input_data.hpp"
 
 void relative_abundancy(data::component_vector components, std::ofstream *file){
@@ -27,7 +28,7 @@ void relative_abundancy(data::component_vector components, std::ofstream *file){
         *file << classes[i] << '\t' << abundancies[i]/total << "\n";
         std::cout << classes[i] << '\t' << abundancies[i]/total << "\n";
     }
-    
+
     *file << '\n';
     std::cout << '\n';
 }
@@ -61,6 +62,27 @@ void petrochemical_study(data::component_vector components, std::ofstream *file)
         }
         total += i.intensity;
         dbe_ant = i.DBE;
+    }
+    *file << '\n';
+
+    int dbe_sel = 0;
+    std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
+    std::cin >> dbe_sel;
+
+    auto compare_c = [] (data::chemical_component a, data::chemical_component b) { return a.C < b.C; };
+    int min_c = std::min_element(class_components.begin(), class_components.end(), compare_c)->C;
+    
+    int max_c = std::max_element(class_components.begin(), class_components.end(), compare_c)->C;
+    
+    std::cout << "\nDistribuicao da quantidade de carbonos no DBE" << dbe_sel << " com a classe " << classes[i_sel] << '\n';
+    *file << "Distribuicao da quantidade de carbonos no DBE" << dbe_sel << " com a classe " << classes[i_sel] << '\n';
+    std::cout << "Num. C\tTotal\n";
+    *file << "Num. C\tTotal\n";
+    for(int i = min_c; i <= max_c; i++){
+        int total = 0;
+        for(auto j : class_components) if(j.C == i) total++;
+        std::cout << i << '\t' << total << '\n';
+        *file << i << '\t' << total << '\n';
     }
     *file << '\n';
     std::cout << '\n';
