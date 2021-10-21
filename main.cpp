@@ -26,7 +26,6 @@ void relative_abundancy(std::vector<data::chemical_component> components, std::o
     } 
     *file << '\n';
 
-    std::cout << std::fixed << std::setprecision(6);
     std::cout << "\nIntensidade total: " << total << "\n";
     std::cout << "Classe\tInt. Relativa\n";
     for(int i = 0; i < n; i++){
@@ -65,9 +64,7 @@ int main(int argc, char **argv){
         new_file.open(new_path, std::ofstream::out);
     }while(!new_file.is_open());
 
-    data::write_modified(components, &new_file);
-    
-    std::cout << "Dados tratados salvos!\n\n";
+    std::cout << std::fixed << std::setprecision(6);
 
     char opt = 0;
     while(opt != '4'){
@@ -89,6 +86,10 @@ int main(int argc, char **argv){
                 break;
         }
     }
+
+    new_file << "Dados tratados: \n";
+    data::write_modified(components, &new_file);
+    std::cout << "Dados tratados salvos!\n";
     new_file.close();
     return 0;
 }

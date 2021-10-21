@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <cstdio>
 
 #define MAX_WIDTH 100
 
@@ -65,7 +66,12 @@ std::vector<data::chemical_component> data::read_ifstream(std::ifstream *input){
 }
 
 std::string data::chemical_component::to_line(){
-    return cls + "\t" + mol_formula + "\t" + std::to_string(C) + "\t" + std::to_string(H) + "\t" + std::to_string(N) + "\t" + std::to_string(DBE) + "\t" + std::to_string(intensity) + "\n";
+    char c_str[5], h_str[5], n_str[5], dbe_str[5];
+    std::sprintf(c_str, "%2d", C);
+    std::sprintf(h_str, "%2d", H);
+    std::sprintf(n_str, "%2d", N);
+    std::sprintf(dbe_str, "%2d", DBE);
+    return cls + "\t\t" + mol_formula + "  \t" + c_str + "\t" + h_str + "\t" + n_str + "\t" + dbe_str + "\t" + std::to_string(intensity) + "\n";
 }
 
 void data::write_modified(std::vector<data::chemical_component> components, std::ofstream *file){
