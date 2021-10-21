@@ -7,7 +7,7 @@
 #include <iomanip>
 #include "input_data.hpp"
 
-void relative_abundancy(std::vector<data::chemical_component> components){
+void relative_abundancy(std::vector<data::chemical_component> components, std::ofstream *file){
     auto classes = analysis::get_classes(components);
     const int n = classes.size();
     std::vector<float> abundancies;
@@ -16,7 +16,16 @@ void relative_abundancy(std::vector<data::chemical_component> components){
         abundancies.push_back(analysis::total_class_intensity(components, classes[i]));
         total += abundancies[i];
     }
-    
+
+    *file << std::fixed << std::setprecision(6);
+    *file << "\nAbundancia das classes heteroatomicas\n";
+    *file << "Intensidade total: " << total << "\n";
+    *file << "Classe\tInt. Relativa\n";
+    for(int i = 0; i < n; i++){
+        *file << classes[i] << '\t' << abundancies[i]/total << "\n";
+    } 
+    *file << '\n';
+
     std::cout << std::fixed << std::setprecision(6);
     std::cout << "\nIntensidade total: " << total << "\n";
     std::cout << "Classe\tInt. Relativa\n";
@@ -26,11 +35,11 @@ void relative_abundancy(std::vector<data::chemical_component> components){
     std::cout << '\n';
 }
 
-void petrochemical_study(std::vector<data::chemical_component> components){
+void petrochemical_study(std::vector<data::chemical_component> components, std::ofstream *file){
     
 }
 
-void geochemical_study(std::vector<data::chemical_component> components){
+void geochemical_study(std::vector<data::chemical_component> components, std::ofstream *file){
     
 }
 
@@ -57,7 +66,6 @@ int main(int argc, char **argv){
     }while(!new_file.is_open());
 
     data::write_modified(components, &new_file);
-    new_file.close();
     
     std::cout << "Dados tratados salvos!\n\n";
 
@@ -71,16 +79,16 @@ int main(int argc, char **argv){
 
         switch(opt){
             case '1':
-                relative_abundancy(components);
+                relative_abundancy(components, &new_file);
                 break;
             case '2':
-                petrochemical_study(components);
+                petrochemical_study(components, &new_file);
                 break;
             case '3':
-                geochemical_study(components);
+                geochemical_study(components, &new_file);
                 break;
         }
     }
-
+    new_file.close();
     return 0;
 }
