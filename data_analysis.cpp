@@ -1,4 +1,5 @@
 #include "input_data.hpp"
+#include <algorithm>
 
 std::vector<std::string> analysis::get_classes(data::component_vector components){
     std::vector<std::string> classes;
@@ -20,5 +21,9 @@ float analysis::total_class_intensity(data::component_vector components, std::st
 }
 
 data::component_vector analysis::components_per_class(data::component_vector components, std::string cls){
-
+    data::component_vector output;
+    for(auto i : components) if(i.cls == cls) output.push_back(i);
+    auto compare_by_dbe = [](data::chemical_component a, data::chemical_component b) {return a.DBE < b.DBE;};
+    std::sort(output.begin(), output.end(), compare_by_dbe);
+    return output;
 }

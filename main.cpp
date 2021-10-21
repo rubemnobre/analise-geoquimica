@@ -36,6 +36,36 @@ void relative_abundancy(data::component_vector components, std::ofstream *file){
 
 void petrochemical_study(data::component_vector components, std::ofstream *file){
     auto classes = analysis::get_classes(components);
+    int n = classes.size();
+    std::cout << '\n';
+    for(int i = 0; i < n; i++){
+        std::cout << i << ". " << classes[i] << '\n';
+    }
+    int i_sel = -1;
+    while(i_sel > n - 1 || i_sel < 0){
+        std::cout << "Selecione a classe heteroatomica: ";
+        std::cin >> i_sel;
+    }
+
+    auto total_class = analysis::total_class_intensity(components, classes[i_sel]);
+    auto class_components = analysis::components_per_class(components, classes[i_sel]);
+    
+    int dbe_ant = class_components[0].DBE;
+    float total = 0.0;
+    std::cout << "\nIntensidade total da classe: " << total_class << "\nDBE\tInt. Relativa\n";
+    *file << "\nEstudo Petroleoquimico da Classe Heteroatomica " << classes[i_sel];
+    *file << "\nIntensidade total da classe: " << total_class << "\nDBE\tInt. Relativa\n";
+    for(auto i : class_components){
+        if(dbe_ant != i.DBE){
+            std::cout << dbe_ant << '\t' << total/total_class << '\n';
+            *file     << dbe_ant << '\t' << total/total_class << '\n';
+            total = 0.0;
+        }
+        total += i.intensity;
+        dbe_ant = i.DBE;
+    }
+    *file << '\n';
+    std::cout << '\n';
 }
 
 void geochemical_study(data::component_vector components, std::ofstream *file){
@@ -65,6 +95,7 @@ int main(int argc, char **argv){
     }while(!new_file.is_open());
 
     std::cout << std::fixed << std::setprecision(6);
+    new_file << std::fixed << std::setprecision(6);
 
     char opt = 0;
     while(opt != '4'){
