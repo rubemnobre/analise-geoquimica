@@ -9,12 +9,12 @@
 #include "input_data.hpp"
 
 void relative_abundancy(data::component_vector components, std::ofstream *file){
-    auto classes = analysis::get_classes(components);
+    auto classes = data::get_classes(components);
     const int n = classes.size();
     std::vector<float> abundancies;
     float total = 0.0;
     for(int i = 0; i < n; i++){
-        abundancies.push_back(analysis::total_class_intensity(components, classes[i]));
+        abundancies.push_back(data::total_class_intensity(components, classes[i]));
         total += abundancies[i];
     }
 
@@ -39,7 +39,7 @@ void petrochemical_study(data::component_vector components, std::ofstream *file)
     std::cout << "\nEscolha: ";
     std::cin >> choice;
     if(choice == 1){
-        auto classes = analysis::get_classes(components);
+        auto classes = data::get_classes(components);
         int n = classes.size();
         std::cout << '\n';
         for(int i = 0; i < n; i++){
@@ -51,8 +51,8 @@ void petrochemical_study(data::component_vector components, std::ofstream *file)
             std::cin >> i_sel;
         }
 
-        auto total_class = analysis::total_class_intensity(components, classes[i_sel]);
-        auto class_components = analysis::components_per_class(components, classes[i_sel]);
+        auto total_class = data::total_class_intensity(components, classes[i_sel]);
+        auto class_components = data::components_per_class(components, classes[i_sel]);
         
         int dbe_ant = class_components[0].DBE;
         float total = 0.0;
@@ -107,7 +107,7 @@ int main(int argc, char **argv){
     while(!input_file.is_open()){
         std::cout << "Digite o nome do arquivo: ";
         std::cin >> nome;
-        input_file.open(nome, std::ifstream::in);
+        input_file.open("./input/" + nome, std::ifstream::in);
     }
 
     std::cout << "Lendo os dados do arquivo " << nome << "!\n";
@@ -116,9 +116,9 @@ int main(int argc, char **argv){
     std::cout << "Leitura finalizada!\nDigite o nome do arquivo para salvar os dados tratados: ";
     std::ofstream new_file;
     do{
-        char new_path[50];
+        std::string new_path;
         std::cin >> new_path;
-        new_file.open(new_path, std::ofstream::out);
+        new_file.open("./output/" + new_path, std::ofstream::out);
     }while(!new_file.is_open());
 
     std::cout << std::fixed << std::setprecision(6);

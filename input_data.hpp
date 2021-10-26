@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 #define N_COLS 7
 
 namespace data{
@@ -27,14 +28,24 @@ namespace data{
     std::vector<std::string> split_line(char *str);
 
     void write_modified(component_vector components, std::ofstream *file);
-}
 
-namespace analysis{
-    std::vector<std::string> get_classes(data::component_vector components);
+    class heteroatomic_class{
+        public:
+            component_vector class_components;
+            std::string class_name;
+            float total_intensity;
+            std::map<int, float> dbe_intensity;
+            heteroatomic_class(component_vector class_components);
+            heteroatomic_class(component_vector components, std::string class_name);
+        private:
+            void construct(component_vector class_components);
+    };
 
-    float total_class_intensity(data::component_vector components, std::string cls);
+    std::vector<std::string> get_classes(component_vector components);
 
-    data::component_vector components_per_class(data::component_vector components, std::string cls);
+    float total_class_intensity(component_vector components, std::string cls);
+
+    component_vector components_per_class(component_vector components, std::string cls);
 }
 
 #endif
