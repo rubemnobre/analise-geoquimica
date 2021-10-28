@@ -53,16 +53,29 @@ void petrochemical_study(data::sample input, std::ofstream *file){
         *file << '\n';
     }
     if(choice == 2){
+        int n = input.class_names.size();
+        std::cout << '\n';
+        for(int i = 0; i < n; i++){
+            std::cout << i << ". " << input.class_names[i] << '\n';
+        }
+        int i_sel = -1;
+        while(i_sel > n - 1 || i_sel < 0){
+            std::cout << "Selecione a classe heteroatomica: ";
+            std::cin >> i_sel;
+        }
+        
+        auto hclass = *input.classes[input.class_names[i_sel]];
+
         int dbe_sel = 0;
         std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
         std::cin >> dbe_sel;
 
-        auto dbe = *input.dbes[dbe_sel];
+        auto dbe = *hclass.class_dbes[dbe_sel];
 
-        std::cout << "\nDistribuicao da quantidade de carbonos no DBE" << dbe_sel << '\n';
-        *file << "Distribuicao da quantidade de carbonos no DBE" << dbe_sel << '\n';
-        std::cout << "Num. C\tTotal\n";
-        *file << "Num. C\tTotal\n";
+        std::cout << "\nDistribuicao da quantidade de carbonos no DBE" << dbe_sel << " da classe" << hclass.class_name << '\n';
+        *file << "Distribuicao da quantidade de carbonos no DBE" << dbe_sel << " da classe" << hclass.class_name << '\n';
+        std::cout << "Num. C\tIntensidade\n";
+        *file << "Num. C\tIntensidade\n";
         for(int i = dbe.min_c; i <= dbe.max_c; i++){
             std::cout << i << '\t' << dbe.c_intensity[i].x << '\n';
             *file << i << '\t' << dbe.c_intensity[i].x << '\n';
