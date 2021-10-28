@@ -93,6 +93,14 @@ namespace data{
             void print_paleoenvironment(std::ostream &output);
             void print_maturity(std::ostream &output);
     };
+
+    class output{
+        public:
+            std::string study_name = "default";
+            std::string folder_path = "./";
+            output(std::string name, std::string path);
+            std::ofstream new_output(std::string name);
+    };
 }
 
 #endif

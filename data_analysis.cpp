@@ -1,6 +1,7 @@
 #include "input_data.hpp"
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include <iomanip>
 
@@ -180,6 +181,7 @@ void data::sample::print_relative_abundancy(std::ostream &output){
 }
 
 void data::sample::print_biodegradation(std::ostream &output){
+    output << std::fixed << std::setprecision(6);
     auto O2 = *get_class("O2");
     auto O1 = *get_class("O1");
     output << "Indices de biodegradacao:\n";
@@ -242,4 +244,13 @@ void data::DBE::print_intensity_per_c(std::ostream &output){
         output << i << '\t' << c_intensity[i].x << '\n';
     }
     output << '\n';
+}
+
+data::output::output(std::string name, std::string folder){
+    study_name = name;
+    folder_path = folder;
+}
+
+std::ofstream data::output::new_output(std::string name){
+    return std::ofstream(folder_path + "/" + study_name + "_" + name + ".txt", std::ofstream::out | std::ofstream::app);
 }

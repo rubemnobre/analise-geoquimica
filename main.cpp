@@ -8,12 +8,14 @@
 #include <algorithm>
 #include "input_data.hpp"
 
-void relative_abundancy(data::sample input, std::ofstream &file){
+void relative_abundancy(data::sample input, data::output out){
+    auto file = out.new_output("abundancia-relativa");
     input.print_relative_abundancy(std::cout);
     input.print_relative_abundancy(file);
 }
 
-void petrochemical_study(data::sample input, std::ofstream &file){
+void petrochemical_study(data::sample input, data::output out){
+    auto file = out.new_output("estudo-petroquimico");
     int choice = 0;
     std::cout << "1. Calcular abundancia relativa do DBE por classe\n2. Calcular distribuicao de numeros carbono por DBE";
     std::cout << "\nEscolha: ";
@@ -60,7 +62,8 @@ void petrochemical_study(data::sample input, std::ofstream &file){
     }
 }
 
-void geochemical_study(data::sample input, std::ofstream &file){
+void geochemical_study(data::sample input, data::output out){
+    auto file = out.new_output("abundancia-relativa");
     std::cout << std::fixed << std::setprecision(6);
     char opt = '0';
     while(opt != '4'){
@@ -99,16 +102,12 @@ int main(int argc, char **argv){
     auto components = data::read_ifstream(&input_file);
     auto input = data::sample(components);
     input_file.close();
-    std::cout << "Leitura finalizada!\nDigite o nome do arquivo para salvar os dados tratados: ";
-    std::ofstream new_file;
-    do{
-        std::string new_path;
-        std::cin >> new_path;
-        new_file.open("./output/" + new_path, std::ofstream::out);
-    }while(!new_file.is_open());
+    std::cout << "Leitura finalizada!\nDigite o nome do estudo a ser realizado: ";
+    std::string study_name;
+    std::cin >> study_name;
+    auto out = data::output(study_name, "./output");
 
     std::cout << std::fixed << std::setprecision(6);
-    new_file << std::fixed << std::setprecision(6);
 
     char opt = 0;
     while(opt != '4'){
@@ -120,20 +119,20 @@ int main(int argc, char **argv){
 
         switch(opt){
             case '1':
-                relative_abundancy(input, new_file);
+                relative_abundancy(input, out);
                 break;
             case '2':
-                petrochemical_study(input, new_file);
+                petrochemical_study(input, out);
                 break;
             case '3':
-                geochemical_study(input, new_file);
+                geochemical_study(input, out);
                 break;
         }
     }
-
-    new_file << "Dados tratados: \n";
-    data::write_modified(components, &new_file);
+    auto file = out.new_output("dados-tratados");
+    file << "Dados tratados: \n";
+    data::write_modified(components, &file);
     std::cout << "Dados tratados salvos!\n";
-    new_file.close();
+    file.close();
     return 0;
 }
