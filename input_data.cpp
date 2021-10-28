@@ -25,10 +25,12 @@ std::vector<std::string> data::split_line(char *str){
 }
 
 data::chemical_component::chemical_component(std::vector<std::string> input_cols){
-    cls = input_cols[0];
-    mol_formula = input_cols[5];
-    std::replace(input_cols[6].begin(), input_cols[6].end(), ',', '.');
+    cls = input_cols[0]; // Classe
+    mol_formula = input_cols[5]; // Formula molecular
+    std::replace(input_cols[6].begin(), input_cols[6].end(), ',', '.'); // Substituir ponto e virgula para não assassinar o std::stof()
     intensity = std::stof(input_cols[6]);
+
+    // Separa os numeros em substrings para rodar a funcao std::stod()
     size_t c_ind = mol_formula.find('C');
     size_t h_ind = mol_formula.find('H');
     size_t n_ind = mol_formula.find('N');
@@ -37,12 +39,12 @@ data::chemical_component::chemical_component(std::vector<std::string> input_cols
     
     C = std::stod(mol_formula.substr(c_ind + 1, h_ind - c_ind + 1));
     
-    int after_h = std::min({n_ind, o_ind, s_ind, mol_formula.size()-1});
+    int after_h = std::min({n_ind, o_ind, s_ind, mol_formula.size()-1}); // Procura o proximo indice depois de h
     H = std::stod(mol_formula.substr(h_ind + 1, after_h - c_ind + 1));
     
     if(n_ind == std::string::npos) N = 0;
     else{
-        int after_n = std::min({o_ind, s_ind, mol_formula.size()-1});
+        int after_n = std::min({o_ind, s_ind, mol_formula.size()-1}); // Procura o proximo indice depois de n
         if(after_n == n_ind + 1) N = 1;
         else N = std::stod(mol_formula.substr(n_ind + 1, after_n - h_ind + 1)); 
     }
