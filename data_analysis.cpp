@@ -29,8 +29,8 @@ float data::total_class_intensity(data::component_vector components, std::string
 data::component_vector data::components_per_class(data::component_vector components, std::string cls){
     data::component_vector output;
     for(auto i : components) if(i.cls == cls) output.push_back(i);
-    auto compare_by_dbe = [](data::chemical_component a, data::chemical_component b) {return a.DBE < b.DBE;};
-    std::sort(output.begin(), output.end(), compare_by_dbe);
+    // auto compare_by_dbe = [](data::chemical_component a, data::chemical_component b) {return a.DBE < b.DBE;};
+    // std::sort(output.begin(), output.end(), compare_by_dbe);
     return output;
 }
 
