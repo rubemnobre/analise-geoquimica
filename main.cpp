@@ -32,7 +32,7 @@ void petrochemical_study(data::sample input, data::output out){
             std::cin >> i_sel;
         }
         
-        auto hclass = *input.classes[input.class_names[i_sel]];
+        auto hclass = *input.get_class(input.class_names[i_sel]);
         
         hclass.print_intensity_per_dbe(std::cout);
         hclass.print_intensity_per_dbe(file);
@@ -49,13 +49,13 @@ void petrochemical_study(data::sample input, data::output out){
             std::cin >> i_sel;
         }
         
-        auto hclass = *input.classes[input.class_names[i_sel]];
+        auto hclass = *input.get_class(input.class_names[i_sel]);
 
         int dbe_sel = 0;
         std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
         std::cin >> dbe_sel;
 
-        auto dbe = *hclass.class_dbes[dbe_sel];
+        auto dbe = *hclass.get_DBE(dbe_sel);
 
         dbe.print_intensity_per_c(std::cout);
         dbe.print_intensity_per_c(file);
