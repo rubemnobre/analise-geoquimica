@@ -238,7 +238,7 @@ void data::heteroatomic_class::print_intensity_per_dbe(std::ostream &output){
 }
 
 void data::DBE::print_intensity_per_c(std::ostream &output){
-    output << "Distribuicao da quantidade de carbonos no DBE" << val << " da classe" << parent_class << '\n';
+    output << "Distribuicao da quantidade de carbonos no DBE" << val << " da classe " << parent_class << '\n';
     output << "Num. C\tIntensidade\n";
     for(int i = min_c; i <= max_c; i++){
         output << i << '\t' << c_intensity[i].x << '\n';

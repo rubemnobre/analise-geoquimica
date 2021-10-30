@@ -17,48 +17,50 @@ void relative_abundancy(data::sample input, data::output out){
 void petrochemical_study(data::sample input, data::output out){
     auto file = out.new_output("estudo-petroquimico");
     int choice = 0;
-    std::cout << "1. Calcular abundancia relativa do DBE por classe\n2. Calcular distribuicao de numeros carbono por DBE";
-    std::cout << "\nEscolha: ";
-    std::cin >> choice;
-    if(choice == 1){
-        int n = input.class_names.size();
-        std::cout << '\n';
-        for(int i = 0; i < n; i++){
-            std::cout << i << ". " << input.class_names[i] << '\n';
+    while(choice != 3){
+        std::cout << "1. Calcular abundancia relativa do DBE por classe\n2. Calcular distribuicao de numeros carbono por DBE\n3.Voltar";
+        std::cout << "\nEscolha: ";
+        std::cin >> choice;
+        if(choice == 1){
+            int n = input.class_names.size();
+            std::cout << '\n';
+            for(int i = 0; i < n; i++){
+                std::cout << i << ". " << input.class_names[i] << '\n';
+            }
+            int i_sel = -1;
+            while(i_sel > n - 1 || i_sel < 0){
+                std::cout << "Selecione a classe heteroatomica: ";
+                std::cin >> i_sel;
+            }
+            
+            auto hclass = *input.get_class(input.class_names[i_sel]);
+            
+            hclass.print_intensity_per_dbe(std::cout);
+            hclass.print_intensity_per_dbe(file);
         }
-        int i_sel = -1;
-        while(i_sel > n - 1 || i_sel < 0){
-            std::cout << "Selecione a classe heteroatomica: ";
-            std::cin >> i_sel;
-        }
-        
-        auto hclass = *input.get_class(input.class_names[i_sel]);
-        
-        hclass.print_intensity_per_dbe(std::cout);
-        hclass.print_intensity_per_dbe(file);
-    }
-    if(choice == 2){
-        int n = input.class_names.size();
-        std::cout << '\n';
-        for(int i = 0; i < n; i++){
-            std::cout << i << ". " << input.class_names[i] << '\n';
-        }
-        int i_sel = -1;
-        while(i_sel > n - 1 || i_sel < 0){
-            std::cout << "Selecione a classe heteroatomica: ";
-            std::cin >> i_sel;
-        }
-        
-        auto hclass = *input.get_class(input.class_names[i_sel]);
+        if(choice == 2){
+            int n = input.class_names.size();
+            std::cout << '\n';
+            for(int i = 0; i < n; i++){
+                std::cout << i << ". " << input.class_names[i] << '\n';
+            }
+            int i_sel = -1;
+            while(i_sel > n - 1 || i_sel < 0){
+                std::cout << "Selecione a classe heteroatomica: ";
+                std::cin >> i_sel;
+            }
+            
+            auto hclass = *input.get_class(input.class_names[i_sel]);
 
-        int dbe_sel = 0;
-        std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
-        std::cin >> dbe_sel;
+            int dbe_sel = 0;
+            std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
+            std::cin >> dbe_sel;
 
-        auto dbe = *hclass.get_DBE(dbe_sel);
+            auto dbe = *hclass.get_DBE(dbe_sel);
 
-        dbe.print_intensity_per_c(std::cout);
-        dbe.print_intensity_per_c(file);
+            dbe.print_intensity_per_c(std::cout);
+            dbe.print_intensity_per_c(file);
+        }
     }
 }
 
@@ -70,7 +72,7 @@ void geochemical_study(data::sample input, data::output out){
         std::cout << "1. Calcular a Biodegradacao\n" <<
                      "2. Calcular a Paleoambiente\n" <<
                      "3. Calcular a Maturidade\n" <<
-                     "4. Sair\nDigite a escolha: ";
+                     "4. Voltar\nDigite a escolha: ";
         std::cin >> opt;
         if(opt == '1'){
             input.print_biodegradation(std::cout);
