@@ -37,14 +37,19 @@ data::component_vector data::components_per_class(data::component_vector compone
 
 data::heteroatomic_class::heteroatomic_class(data::component_vector components, std::string name){
     for(auto i : components) if(i.cls == name) class_components.push_back(i);
-
+    auto compare_by_dbe = [](data::chemical_component a, data::chemical_component b) {return a.DBE < b.DBE;};
+    std::sort(class_components.begin(), class_components.end(), compare_by_dbe);
     class_name = name;
     intensity = 0;
     if(class_components.size() > 0){
         int dbe_ant = class_components.back().DBE;
+        class_dbes[dbe_ant] = new data::DBE(class_components, dbe_ant);
         for(auto i : class_components){
-            if(i.DBE != dbe_ant) class_dbes[i.DBE] = new data::DBE(class_components, i.DBE);
+            if(i.DBE != dbe_ant){
+                class_dbes[i.DBE] = new data::DBE(class_components, i.DBE);
+            }
             intensity += i.intensity;
+            dbe_ant = i.DBE;
         }
     }
 }
