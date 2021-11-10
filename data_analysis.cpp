@@ -42,7 +42,7 @@ data::heteroatomic_class::heteroatomic_class(data::component_vector components, 
     class_name = name;
     intensity = 0;
     if(class_components.size() > 0){
-        int dbe_ant = class_components.back().DBE;
+        int dbe_ant = class_components.front().DBE;
         class_dbes[dbe_ant] = new data::DBE(class_components, dbe_ant);
         for(auto i : class_components){
             if(i.DBE != dbe_ant){
@@ -64,7 +64,7 @@ data::DBE::DBE(data::component_vector components, int dbe){
     std::sort(components.begin(), components.end(), compare_by_c);
     
     if(components.size() > 0){
-        int prev_c = components.back().C;
+        int prev_c = components.front().C;
         c_intensity[prev_c].x = 0.0;
         for(auto i : components){
             if(i.DBE == val){
@@ -188,7 +188,7 @@ void data::sample::print_relative_abundancy(std::ostream &output){
 void data::sample::print_biodegradation(std::ostream &output){
     output << std::fixed << std::setprecision(6);
     auto O2 = *get_class("O2");
-    auto O1 = *get_class("O1");
+    auto O1 = *get_class("O");
     output << "Indices de biodegradacao:\n";
     output << "A/C: " << (O2.get_DBE(1)->intensity)/O2.sum_dbe(2, 4) << "\n";
     output << "A/C mod.: " << (O2.get_DBE(1)->intensity)/O2.sum_dbe(2, 6) << "\n";
@@ -200,7 +200,7 @@ void data::sample::print_biodegradation(std::ostream &output){
 
 void data::sample::print_paleoenvironment(std::ostream &output){
     auto O2 = *get_class("O2");
-    auto O1 = *get_class("O1");
+    auto O1 = *get_class("O");
     auto NO = *get_class("NO");
     auto N = *get_class("N");
 
@@ -237,7 +237,7 @@ void data::heteroatomic_class::print_intensity_per_dbe(std::ostream &output){
     output << "\nAbundancia relativa do DBE na Classe Heteroatomica " << class_name;
     output << "\nIntensidade total da classe: " << intensity << "\nDBE\tInt. Relativa\n";
     for(auto i : class_dbes){
-        output     << i.first << '\t' << i.second->intensity/intensity << '\n';
+        output << i.first << '\t' << get_DBE(i.first)->intensity/intensity << '\n';
     }
     output << '\n';
 }
