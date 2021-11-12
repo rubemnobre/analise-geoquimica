@@ -219,9 +219,9 @@ void data::sample::print_paleoenvironment(std::ostream &output){
     output << "Razao Rocha 3: " << NO.get_DBE(10)->intensity << "\n";
     output << "Razao Rocha 4: " << O1.get_DBE(4)->intensity << "\n";
     output << "Razao Rocha 5: " << N.sum_dbe(6, 10)/(N.sum_dbe(6, 10) + N.sum_dbe(10, 27)) << "\n";
-    output << "Razao Rocha 6: " << N.sum_dbe(2, 14)/(N.sum_dbe(2, 14) + N.sum_dbe(15, 29)) << "\n";
-    output << "Razao Rocha 7: " << O1.sum_dbe(4, 12) + O2.get_DBE(12)->intensity/(O1.sum_dbe({4, 12, 14, 16}) + O2.sum_dbe({12, 13})) << "\n";
-    output << "Razao Rocha 8: " << N.sum_dbe({8, 9}) + NO.sum_dbe({9, 10})/(N.sum_dbe({8, 9, 13, 16}) + NO.sum_dbe({9, 10, 19, 20})) << "\n";
+    output << "Razao Rocha 6: " << NO.sum_dbe(2, 14)/(NO.sum_dbe(2, 14) + NO.sum_dbe(15, 29)) << "\n";
+    output << "Razao Rocha 7: " << (O1.sum_dbe(4, 12) + O2.get_DBE(12)->intensity)/(O1.sum_dbe({4, 12, 14, 16}) + O2.sum_dbe({12, 13})) << "\n";
+    output << "Razao Rocha 8: " << (N.sum_dbe({8, 9}) + NO.sum_dbe({9, 10}))/(N.sum_dbe({8, 9, 13, 16}) + NO.sum_dbe({9, 10, 19, 20})) << "\n";
 }
 
 void data::sample::print_maturity(std::ostream &output){
