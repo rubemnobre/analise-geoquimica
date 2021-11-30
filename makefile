@@ -1,14 +1,23 @@
 all: geoquim
 
-geoquim: input_data.o data_analysis.o main.o
-	g++ -o geoquim.exe data_analysis.o input_data.o main.o
+geoquim: C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o main.o
+	g++ -o geoquim.exe C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o main.o
 
-input_data.o: input_data.cpp input_data.hpp
-	g++ -c input_data.cpp
+C_Amostra.o: C_Amostra.cpp C_Amostra.hpp C_ComponenteQuimico.hpp C_DBE.hpp C_Heteroatomica.hpp
+	g++ -c C_Amostra.cpp
 
-data_analysis.o: data_analysis.cpp input_data.hpp
-	g++ -c data_analysis.cpp
+C_SaidaDeDados.o: C_SaidaDeDados.cpp C_SaidaDeDados.hpp
+	g++ -c C_SaidaDeDados.cpp
 
-main.o: main.cpp input_data.cpp data_analysis.cpp input_data.hpp
+C_Heteroatomica.o: C_Heteroatomica.cpp C_Heteroatomica.hpp C_ComponenteQuimico.hpp C_DBE.hpp
+	g++ -c C_Heteroatomica.cpp
+
+C_DBE.o: C_DBE.cpp C_DBE.hpp C_ComponenteQuimico.hpp
+	g++ -c C_DBE.cpp
+
+C_ComponenteQuimico.o : C_ComponenteQuimico.cpp C_ComponenteQuimico.hpp
+	g++ -c C_ComponenteQuimico.cpp
+
+main.o: main.cpp C_Amostra.hpp C_SaidaDeDados.hpp
 	g++ -c main.cpp
 

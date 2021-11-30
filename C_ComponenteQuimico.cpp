@@ -1,32 +1,5 @@
-#include "input_data.hpp"
-#include <iostream>
-#include <fstream>
-#include <array>
-#include <vector>
-#include <string>
 #include <algorithm>
-#include <cstdio>
-#include <cctype>
-
-#define MAX_WIDTH 100
-
-std::vector<std::string> data::split_line(char *str){
-    std::vector<std::string> output;
-    int last = 0;
-    int i_col = 0;
-    for(int i = 0; str[i] != '\0' && i_col < N_COLS - 1; i++){
-        if(isspace(str[i])){
-            do{
-                i++;
-            }while(isspace(str[i]));
-            output.push_back(std::string(&str[last], (i - 1) - last));
-            i_col++;
-            last = i;
-        }
-    }
-    output.push_back(std::string(&str[last]));
-    return output;
-}
+#include "C_ComponenteQuimico.hpp"
 
 data::C_ComponenteQuimico::C_ComponenteQuimico(std::vector<std::string> input_cols){
     cls = input_cols[0]; // Classe
@@ -54,27 +27,10 @@ data::C_ComponenteQuimico::C_ComponenteQuimico(std::vector<std::string> input_co
             N = 1;
         }else{
             N = std::stod(mol_formula.substr(n_ind + 1, after_n - (n_ind + 1)));
-            int a;
-            std::cin >> a;
         }
     }
 
     DBE = C - H/2.0 + N/2.0 + 1.0;
-}
-
-data::component_vector data::read_ifstream(std::ifstream *input){
-    data::component_vector data_vector;
-    char header[MAX_WIDTH];
-    input->getline(header, MAX_WIDTH);
-    while(!input->eof()){
-        char input_line[MAX_WIDTH];
-        input->getline(input_line, MAX_WIDTH);
-        auto input_cols = data::split_line(input_line);
-        if(input_cols.size() == 7){
-            data_vector.push_back(data::C_ComponenteQuimico(input_cols));
-        }
-    }
-    return data_vector;
 }
 
 std::string data::C_ComponenteQuimico::to_line(){
@@ -86,10 +42,33 @@ std::string data::C_ComponenteQuimico::to_line(){
     return cls + "\t\t" + mol_formula + "  \t" + c_str + "\t" + h_str + "\t" + n_str + "\t" + dbe_str + "\t" + std::to_string(intensity) + "\n";
 }
 
-void data::write_modified(data::component_vector components, std::ofstream *file){
+
+std::vector<std::string> data::get_classes(data::component_vector components){
+    auto compare_by_cls = [](data::C_ComponenteQuimico a, data::C_ComponenteQuimico b) {return a.cls < b.cls;};
+    std::sort(components.begin(), components.end(), compare_by_cls);
+
+    std::vector<std::string> classes;
     int n = components.size();
-    *file << "Class\tMol. Formula\tC\tH\tN\tDBE\tIntensity\n";
-    for(int i = 0; i < n; i++){
-        *file << components[i].to_line();
+    classes.push_back(components[0].cls);
+    for(int i = 1; i < n; i++){
+        if(components[i].cls != classes.back()) classes.push_back(components[i].cls);
     }
+    return classes;
+}
+
+float data::total_class_intensity(data::component_vector components, std::string cls){
+    float total = 0.0;
+    int n = components.size();
+    for(int i = 0; i < n; i++){
+        if(components[i].cls == cls) total += components[i].intensity;
+    }
+    return total;
+}
+
+data::component_vector data::components_per_class(data::component_vector components, std::string cls){
+    data::component_vector output;
+    for(auto i : components) if(i.cls == cls) output.push_back(i);
+    // auto compare_by_dbe = [](data::C_ComponenteQuimico a, data::C_ComponenteQuimico b) {return a.DBE < b.DBE;};
+    // std::sort(output.begin(), output.end(), compare_by_dbe);
+    return output;
 }

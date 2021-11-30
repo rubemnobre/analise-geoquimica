@@ -6,7 +6,8 @@
 #include <array>
 #include <iomanip>
 #include <algorithm>
-#include "input_data.hpp"
+#include "C_Amostra.hpp"
+#include "C_SaidaDeDados.hpp"
 
 void relative_abundancy(data::C_Amostra input, data::C_SaidaDeDados out){
     auto file = out.new_output("abundancia-relativa");
