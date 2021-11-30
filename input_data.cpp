@@ -10,7 +10,7 @@
 
 #define MAX_WIDTH 100
 
-std::vector<std::string> data::split_line(char *str){
+std::vector<std::string> split_line(char *str){
     std::vector<std::string> output;
     int last = 0;
     int i_col = 0;
@@ -28,7 +28,7 @@ std::vector<std::string> data::split_line(char *str){
     return output;
 }
 
-data::chemical_component::chemical_component(std::vector<std::string> input_cols){
+chemical_component::chemical_component(std::vector<std::string> input_cols){
     cls = input_cols[0]; // Classe
     mol_formula = input_cols[5]; // Formula molecular
     std::replace(input_cols[6].begin(), input_cols[6].end(), ',', '.'); // Substituir ponto e virgula para não assassinar o std::stof()
@@ -62,22 +62,22 @@ data::chemical_component::chemical_component(std::vector<std::string> input_cols
     DBE = C - H/2.0 + N/2.0 + 1.0;
 }
 
-data::component_vector data::read_ifstream(std::ifstream *input){
-    data::component_vector data_vector;
+component_vector read_ifstream(std::ifstream *input){
+    component_vector data_vector;
     char header[MAX_WIDTH];
     input->getline(header, MAX_WIDTH);
     while(!input->eof()){
         char input_line[MAX_WIDTH];
         input->getline(input_line, MAX_WIDTH);
-        auto input_cols = data::split_line(input_line);
+        auto input_cols = split_line(input_line);
         if(input_cols.size() == 7){
-            data_vector.push_back(data::chemical_component(input_cols));
+            data_vector.push_back(chemical_component(input_cols));
         }
     }
     return data_vector;
 }
 
-std::string data::chemical_component::to_line(){
+std::string chemical_component::to_line(){
     char c_str[5], h_str[5], n_str[5], dbe_str[5];
     std::sprintf(c_str, "%2d", C);
     std::sprintf(h_str, "%2d", H);
@@ -86,7 +86,7 @@ std::string data::chemical_component::to_line(){
     return cls + "\t\t" + mol_formula + "  \t" + c_str + "\t" + h_str + "\t" + n_str + "\t" + dbe_str + "\t" + std::to_string(intensity) + "\n";
 }
 
-void data::write_modified(data::component_vector components, std::ofstream *file){
+void write_modified(component_vector components, std::ofstream *file){
     int n = components.size();
     *file << "Class\tMol. Formula\tC\tH\tN\tDBE\tIntensity\n";
     for(int i = 0; i < n; i++){
