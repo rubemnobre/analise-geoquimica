@@ -8,13 +8,13 @@
 #include <algorithm>
 #include "input_data.hpp"
 
-void relative_abundancy(data::sample input, data::output out){
+void relative_abundancy(data::C_Amostra input, data::C_SaidaDeDados out){
     auto file = out.new_output("abundancia-relativa");
     input.print_relative_abundancy(std::cout);
     input.print_relative_abundancy(file);
 }
 
-void petrochemical_study(data::sample input, data::output out){
+void petrochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
     auto file = out.new_output("estudo-petroquimico");
     int choice = 0;
     while(choice != 3){
@@ -64,7 +64,7 @@ void petrochemical_study(data::sample input, data::output out){
     }
 }
 
-void geochemical_study(data::sample input, data::output out){
+void geochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
     auto file = out.new_output("abundancia-relativa");
     std::cout << std::fixed << std::setprecision(6);
     char opt = '0';
@@ -102,12 +102,12 @@ int main(int argc, char **argv){
 
     std::cout << "Lendo os dados do arquivo " << nome << "!\n";
     auto components = data::read_ifstream(&input_file);
-    auto input = data::sample(components);
+    auto input = data::C_Amostra(components);
     input_file.close();
     std::cout << "Leitura finalizada!\nDigite o nome do estudo a ser realizado: ";
     std::string study_name;
     std::cin >> study_name;
-    auto out = data::output(study_name, "./output");
+    auto out = data::C_SaidaDeDados(study_name, "./output");
 
     std::cout << std::fixed << std::setprecision(6);
 

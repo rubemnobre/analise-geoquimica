@@ -6,7 +6,7 @@
 #include <iomanip>
 
 std::vector<std::string> data::get_classes(data::component_vector components){
-    auto compare_by_cls = [](data::chemical_component a, data::chemical_component b) {return a.cls < b.cls;};
+    auto compare_by_cls = [](data::C_ComponenteQuimico a, data::C_ComponenteQuimico b) {return a.cls < b.cls;};
     std::sort(components.begin(), components.end(), compare_by_cls);
 
     std::vector<std::string> classes;
@@ -30,23 +30,23 @@ float data::total_class_intensity(data::component_vector components, std::string
 data::component_vector data::components_per_class(data::component_vector components, std::string cls){
     data::component_vector output;
     for(auto i : components) if(i.cls == cls) output.push_back(i);
-    // auto compare_by_dbe = [](data::chemical_component a, data::chemical_component b) {return a.DBE < b.DBE;};
+    // auto compare_by_dbe = [](data::C_ComponenteQuimico a, data::C_ComponenteQuimico b) {return a.DBE < b.DBE;};
     // std::sort(output.begin(), output.end(), compare_by_dbe);
     return output;
 }
 
-data::heteroatomic_class::heteroatomic_class(data::component_vector components, std::string name){
+data::C_Heteroatomica::C_Heteroatomica(data::component_vector components, std::string name){
     for(auto i : components) if(i.cls == name) class_components.push_back(i);
-    auto compare_by_dbe = [](data::chemical_component a, data::chemical_component b) {return a.DBE < b.DBE;};
+    auto compare_by_dbe = [](data::C_ComponenteQuimico a, data::C_ComponenteQuimico b) {return a.DBE < b.DBE;};
     std::sort(class_components.begin(), class_components.end(), compare_by_dbe);
     class_name = name;
     intensity = 0;
     if(class_components.size() > 0){
         int dbe_ant = class_components.front().DBE;
-        class_dbes[dbe_ant] = new data::DBE(class_components, dbe_ant);
+        class_dbes[dbe_ant] = new data::C_DBE(class_components, dbe_ant);
         for(auto i : class_components){
             if(i.DBE != dbe_ant){
-                class_dbes[i.DBE] = new data::DBE(class_components, i.DBE);
+                class_dbes[i.DBE] = new data::C_DBE(class_components, i.DBE);
             }
             intensity += i.intensity;
             dbe_ant = i.DBE;
@@ -54,13 +54,13 @@ data::heteroatomic_class::heteroatomic_class(data::component_vector components, 
     }
 }
 
-data::DBE::DBE(data::component_vector components, int dbe){
+data::C_DBE::C_DBE(data::component_vector components, int dbe){
     dbe_components = components;
     if(components.size() > 0) parent_class = components[0].cls;
     val = dbe;
 
     // Ordena os componentes do DBE por número de carbono
-    auto compare_by_c = [](data::chemical_component a, data::chemical_component b) {return a.C < b.C;};
+    auto compare_by_c = [](data::C_ComponenteQuimico a, data::C_ComponenteQuimico b) {return a.C < b.C;};
     std::sort(components.begin(), components.end(), compare_by_c);
     
     if(components.size() > 0){
@@ -80,24 +80,24 @@ data::DBE::DBE(data::component_vector components, int dbe){
     }
 }
 
-data::sample::sample(data::component_vector components){
-    sample_components = components;
+data::C_Amostra::C_Amostra(data::component_vector components){
+    C_Amostra_components = components;
     class_names = data::get_classes(components);
     for(auto i : class_names){
-        classes[i] = new data::heteroatomic_class(components, i);
+        classes[i] = new data::C_Heteroatomica(components, i);
     }
     
-    auto compare_by_dbe = [](data::chemical_component a, data::chemical_component b) {return a.DBE < b.DBE;};
+    auto compare_by_dbe = [](data::C_ComponenteQuimico a, data::C_ComponenteQuimico b) {return a.DBE < b.DBE;};
     std::sort(components.begin(), components.end(), compare_by_dbe);
     
     intensity = 0;
 
     if(components.size() > 0){
         int dbe_ant = components[0].DBE;
-        dbes[dbe_ant] = new data::DBE(components, dbe_ant);
+        dbes[dbe_ant] = new data::C_DBE(components, dbe_ant);
         for(auto i : components){
             if(i.DBE != dbe_ant){
-                dbes[i.DBE] = new data::DBE(components, i.DBE);
+                dbes[i.DBE] = new data::C_DBE(components, i.DBE);
             }
             dbe_ant = i.DBE;
             intensity += i.intensity;
@@ -105,19 +105,19 @@ data::sample::sample(data::component_vector components){
     }
 }
 
-float data::heteroatomic_class::sum_dbe(int min, int max){
+float data::C_Heteroatomica::sum_dbe(int min, int max){
     float sum = 0.0;
     for(int i = min; i <= max; i++) sum += get_DBE(i)->intensity;
     return sum;
 }
 
-float data::heteroatomic_class::sum_dbe(std::vector<int> vals){
+float data::C_Heteroatomica::sum_dbe(std::vector<int> vals){
     float sum = 0.0;
     for(auto i : vals) sum += get_DBE(i)->intensity;
     return sum;
 }
 
-float data::DBE::sum_c(int min, int max, int opt){
+float data::C_DBE::sum_c(int min, int max, int opt){
     float sum = 0.0;
     if(opt == all) for(int i = min; i <= max; i++) sum += c_intensity[i].x;
 
@@ -128,52 +128,52 @@ float data::DBE::sum_c(int min, int max, int opt){
     return sum;
 }
 
-float data::DBE::sum_c(std::vector<int> vals){
+float data::C_DBE::sum_c(std::vector<int> vals){
     float sum = 0.0;
     for(auto i : vals) sum += c_intensity[i].x;
     return sum;
 }
 
-data::heteroatomic_class *data::sample::get_class(std::string name){
+data::C_Heteroatomica *data::C_Amostra::get_class(std::string name){
     try {
         return classes.at(name);
     }
     catch (const std::out_of_range& oor) {
-        return new data::heteroatomic_class(sample_components, name);
+        return new data::C_Heteroatomica(C_Amostra_components, name);
     }
 }
 
-data::DBE *data::sample::get_DBE(int num){
+data::C_DBE *data::C_Amostra::get_DBE(int num){
     try {
         return dbes.at(num);
     }
     catch (const std::out_of_range& oor) {
-        return new data::DBE(sample_components, num);
+        return new data::C_DBE(C_Amostra_components, num);
     }
 }
 
-data::DBE *data::heteroatomic_class::get_DBE(int num){
+data::C_DBE *data::C_Heteroatomica::get_DBE(int num){
     try {
         return class_dbes.at(num);
     }
     catch (const std::out_of_range& oor) {
-        return new data::DBE(class_components, num);
+        return new data::C_DBE(class_components, num);
     }
 }
 
-float data::heteroatomic_class::C(int dbe, int c){
+float data::C_Heteroatomica::C(int dbe, int c){
     return get_DBE(dbe)->c_intensity[c].x;
 }
 
-float data::heteroatomic_class::sum_C(int dbe, int min, int max, int opt){
+float data::C_Heteroatomica::sum_C(int dbe, int min, int max, int opt){
     return get_DBE(dbe)->sum_c(min, max, opt);
 }
 
-float data::heteroatomic_class::sum_C(int dbe, std::vector<int> vals){
+float data::C_Heteroatomica::sum_C(int dbe, std::vector<int> vals){
     return get_DBE(dbe)->sum_c(vals);
 }
 
-void data::sample::print_relative_abundancy(std::ostream &output){
+void data::C_Amostra::print_relative_abundancy(std::ostream &output){
     output << std::fixed << std::setprecision(6);
     output << "\nAbundancia das classes heteroatomicas\n";
     output << "Intensidade total: " << intensity << "\n";
@@ -185,7 +185,7 @@ void data::sample::print_relative_abundancy(std::ostream &output){
     output << '\n';
 }
 
-void data::sample::print_biodegradation(std::ostream &output){
+void data::C_Amostra::print_biodegradation(std::ostream &output){
     output << std::fixed << std::setprecision(6);
     auto O2 = *get_class("O2");
     auto O1 = *get_class("O");
@@ -198,7 +198,7 @@ void data::sample::print_biodegradation(std::ostream &output){
     output << "Indice MA2: " << (O1.get_DBE(4)->intensity)/(O1.get_DBE(7)->intensity) << "\n";
 }
 
-void data::sample::print_paleoenvironment(std::ostream &output){
+void data::C_Amostra::print_paleoenvironment(std::ostream &output){
     auto O2 = *get_class("O2");
     auto O1 = *get_class("O");
     auto NO = *get_class("NO");
@@ -208,7 +208,7 @@ void data::sample::print_paleoenvironment(std::ostream &output){
     output << "Indice Phenol: " << (O1.get_DBE(4)->intensity)/O1.intensity << "\n";
     output << "C27/C28 (DBE4): " << (O1.C(4, 27))/(O1.C(4, 28)) << "\n";
     output << "C27/C28 (DBE5): " << (O1.C(5, 27))/(O1.C(5, 28)) << "\n";
-    output << "Par/Impar (FA): " << (O2.sum_C(1, 20, 36, data::DBE::even))/(O2.sum_C(1, 19, 35, data::DBE::odd)) << "\n";
+    output << "Par/Impar (FA): " << (O2.sum_C(1, 20, 36, data::C_DBE::even))/(O2.sum_C(1, 19, 35, data::C_DBE::odd)) << "\n";
     output << "OEP (FA): " << (O2.C(1, 22) + 6.0*O2.C(1, 28) + O2.C(1, 26))/(4*O2.C(1, 23) + 4*O2.C(1, 25)) << "\n";
     output << "TAR (FA) Par: " << (O2.sum_C(1, {24, 26, 28}))/(O2.sum_C(1, {12, 14, 16})) << "\n";
     output << "TAR (FA) Impar: " << (O2.sum_C(1, {27, 29, 31}))/(O2.sum_C(1, {15, 17, 19})) << "\n";
@@ -224,7 +224,7 @@ void data::sample::print_paleoenvironment(std::ostream &output){
     output << "Razao Rocha 8: " << (N.sum_dbe({8, 9}) + NO.sum_dbe({9, 10}))/(N.sum_dbe({8, 9, 13, 16}) + NO.sum_dbe({9, 10, 19, 20})) << "\n";
 }
 
-void data::sample::print_maturity(std::ostream &output){
+void data::C_Amostra::print_maturity(std::ostream &output){
     auto N = *get_class("N");
 
     output << "Indices de maturidade:\n";
@@ -233,7 +233,7 @@ void data::sample::print_maturity(std::ostream &output){
     output << "DBE15 da Classe N: " << N.get_DBE(15)->intensity << "\n";
 }
 
-void data::heteroatomic_class::print_intensity_per_dbe(std::ostream &output){
+void data::C_Heteroatomica::print_intensity_per_dbe(std::ostream &output){
     output << "\nAbundancia relativa do DBE na Classe Heteroatomica " << class_name;
     output << "\nIntensidade total da classe: " << intensity << "\nDBE\tInt. Relativa\n";
     for(auto i : class_dbes){
@@ -242,7 +242,7 @@ void data::heteroatomic_class::print_intensity_per_dbe(std::ostream &output){
     output << '\n';
 }
 
-void data::DBE::print_intensity_per_c(std::ostream &output){
+void data::C_DBE::print_intensity_per_c(std::ostream &output){
     output << "Distribuicao da quantidade de carbonos no DBE" << val << " da classe " << parent_class << '\n';
     output << "Num. C\tIntensidade\n";
     for(int i = min_c; i <= max_c; i++){
@@ -251,11 +251,11 @@ void data::DBE::print_intensity_per_c(std::ostream &output){
     output << '\n';
 }
 
-data::output::output(std::string name, std::string folder){
+data::C_SaidaDeDados::C_SaidaDeDados(std::string name, std::string folder){
     study_name = name;
     folder_path = folder;
 }
 
-std::ofstream data::output::new_output(std::string name){
+std::ofstream data::C_SaidaDeDados::new_output(std::string name){
     return std::ofstream(folder_path + "/" + study_name + "_" + name + ".txt", std::ofstream::out | std::ofstream::app);
 }

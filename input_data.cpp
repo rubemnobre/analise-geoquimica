@@ -28,7 +28,7 @@ std::vector<std::string> data::split_line(char *str){
     return output;
 }
 
-data::chemical_component::chemical_component(std::vector<std::string> input_cols){
+data::C_ComponenteQuimico::C_ComponenteQuimico(std::vector<std::string> input_cols){
     cls = input_cols[0]; // Classe
     mol_formula = input_cols[5]; // Formula molecular
     std::replace(input_cols[6].begin(), input_cols[6].end(), ',', '.'); // Substituir ponto e virgula para não assassinar o std::stof()
@@ -71,13 +71,13 @@ data::component_vector data::read_ifstream(std::ifstream *input){
         input->getline(input_line, MAX_WIDTH);
         auto input_cols = data::split_line(input_line);
         if(input_cols.size() == 7){
-            data_vector.push_back(data::chemical_component(input_cols));
+            data_vector.push_back(data::C_ComponenteQuimico(input_cols));
         }
     }
     return data_vector;
 }
 
-std::string data::chemical_component::to_line(){
+std::string data::C_ComponenteQuimico::to_line(){
     char c_str[5], h_str[5], n_str[5], dbe_str[5];
     std::sprintf(c_str, "%2d", C);
     std::sprintf(h_str, "%2d", H);
