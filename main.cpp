@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <algorithm>
 #include "C_Amostra.hpp"
+#include "C_EntradaDeDados.hpp"
 #include "C_SaidaDeDados.hpp"
 
 void relative_abundancy(data::C_Amostra input, data::C_SaidaDeDados out){
@@ -93,18 +94,16 @@ void geochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
 int main(int argc, char **argv){
     std::cout << "Analise Geoquimica - Outubro 2021\n";
 
-    std::ifstream input_file;
-    std::string nome;
-    while(!input_file.is_open()){
+    data::C_EntradaDeDados data_input;
+    while(!data_input.is_successful()){
+        std::cout << data_input.error;
+        std::string fname;
         std::cout << "Digite o nome do arquivo: ";
-        std::cin >> nome;
-        input_file.open("./input/" + nome, std::ifstream::in);
+        std::cin >> fname;
+        data_input.open("./input/" + fname);
     }
 
-    std::cout << "Lendo os dados do arquivo " << nome << "!\n";
-    auto components = data::read_ifstream(&input_file);
-    auto input = data::C_Amostra(components);
-    input_file.close();
+    auto input = data_input.get_sample();
     std::cout << "Leitura finalizada!\nDigite o nome do estudo a ser realizado: ";
     std::string study_name;
     std::cin >> study_name;
@@ -134,7 +133,7 @@ int main(int argc, char **argv){
     }
     auto file = out.new_output("dados-tratados");
     file << "Dados tratados: \n";
-    data::write_modified(components, &file);
+    input.print_modified(file);
     std::cout << "Dados tratados salvos!\n";
     file.close();
     return 0;

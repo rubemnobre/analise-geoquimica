@@ -1,7 +1,13 @@
 all: geoquim
 
-geoquim: C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o main.o
-	g++ -o geoquim.exe C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o main.o
+geoquim: C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o C_EntradaDeDados.o C_DistC.o main.o
+	g++ -o geoquim.exe C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o C_EntradaDeDados.o C_DistC.o main.o
+
+C_EntradaDeDados.o: C_EntradaDeDados.cpp
+	g++ -c C_EntradaDeDados.cpp
+
+C_DistC.o: C_DistC.cpp
+	g++ -c C_DistC.cpp
 
 C_Amostra.o: C_Amostra.cpp
 	g++ -c C_Amostra.cpp
