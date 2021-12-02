@@ -17,6 +17,8 @@ void relative_abundancy(data::C_Amostra input, data::C_SaidaDeDados out){
     input.print_relative_abundancy(file);
     auto graf = out.new_plot("Abundancia Relativa");
     input.print_relative_abundancy(graf.data);
+    graf.xlabel("Classe Heteroatômica");
+    graf.ylabel("Abundância Relativa (%)");
     graf.histogram();
 }
 
@@ -45,6 +47,8 @@ void petrochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
             hclass.print_intensity_per_dbe(file);
             auto graf = out.new_plot(hclass.class_name + " Intensidade por DBE");
             hclass.print_intensity_per_dbe(graf.data);
+            graf.xlabel("DBE");
+            graf.ylabel("Abundância Relativa (%)");
             graf.histogram();
         }
         if(choice == 2){
@@ -71,6 +75,8 @@ void petrochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
             dbe.print_intensity_per_c(file);
             auto graf = out.new_plot("Classe " + hclass.class_name + " DBE " + std::to_string(dbe.val) + " intensidade por C");
             dbe.print_intensity_per_c(graf.data);
+            graf.xlabel("Número de Carbonos");
+            graf.ylabel("Intensidade");
             graf.histogram();
         }
     }

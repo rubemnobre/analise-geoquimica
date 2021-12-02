@@ -16,6 +16,8 @@ namespace plot{
             C_Grafico();
             C_Grafico(std::string st, std::string path, std::string name);
             void histogram();
+            void ylabel(std::string label);
+            void xlabel(std::string label);
             std::string title;
             std::stringstream data;
         private:

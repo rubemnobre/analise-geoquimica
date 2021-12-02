@@ -40,3 +40,11 @@ void C_Grafico::run(std::string opt){
         std::cout << "gnuplot retornou um erro!\n";
     }
 }
+
+void C_Grafico::xlabel(std::string label){
+    command << "set xlabel '" << label << "'\n";
+}
+
+void C_Grafico::ylabel(std::string label){
+    command << "set ylabel '" << label << "'\n";
+}

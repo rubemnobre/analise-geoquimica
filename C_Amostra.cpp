@@ -32,9 +32,9 @@ void data::C_Amostra::print_relative_abundancy(std::ostream &output){
     output << std::fixed << std::setprecision(6);
     output << "\n#Abundancia das classes heteroatomicas\n";
     output << "#Intensidade total: " << intensity << "\n";
-    output << "#Classe\tInt. Relativa\n";
+    output << "#Classe\tInt. Relativa (%)\n";
     for(auto i : classes){
-        output << i.first << '\t' << i.second->intensity/intensity << "\n";
+        output << i.first << '\t' << 100*i.second->intensity/intensity << "\n";
     }
 
     output << '\n';

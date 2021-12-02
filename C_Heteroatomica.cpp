@@ -25,9 +25,9 @@ data::C_Heteroatomica::C_Heteroatomica(data::component_vector components, std::s
 
 void data::C_Heteroatomica::print_intensity_per_dbe(std::ostream &output){
     output << "\n#Abundancia relativa do DBE na Classe Heteroatomica " << class_name;
-    output << "\n#Intensidade total da classe: " << intensity << "\nDBE\tInt. Relativa\n";
+    output << "\n#Intensidade total da classe: " << intensity << "\nDBE\tInt. Relativa (%)\n";
     for(auto i : class_dbes){
-        output << i.first << '\t' << get_DBE(i.first)->intensity/intensity << '\n';
+        output << i.first << '\t' << 100*get_DBE(i.first)->intensity/intensity << '\n';
     }
     output << '\n';
 }
