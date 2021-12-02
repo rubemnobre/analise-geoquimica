@@ -1,19 +1,22 @@
 #include <vector>
 #include <string>
+#include <sstream>
+#include "C_Amostra.hpp"
+#include "C_DBE.hpp"
+#include "C_Heteroatomica.hpp"
 
 #ifndef C_GRAFICO_HPP
 #define C_GRAFICO_HPP
 
 namespace plot{
-    template <typename xtype> class C_Grafico{
+    class C_Grafico{
         public:
-            C_Grafico(const int type);
-            void add_point(xtype x, float y);
-            void add_point(xtype x, float y, std::string group);
-            void add_group(std::vector<xtype> x, std::vector<float> y, std::string label);
-            void plot(std::string fname);
-            static const int histogram = 0;
-            static const int scatter = 1;
+            C_Grafico();
+            void histogram();
+            void histogram(std::string fname);
+        private:
+            std::stringstream data_text;
+            std::stringstream command;
     };
 }
 

@@ -1,17 +1,17 @@
 #include "C_Grafico.hpp"
+#include <string>
+#include <cstdio>
 
-template <typename xtype> plot::C_Grafico<xtype>::C_Grafico(const int type){
+using namespace plot;
+
+C_Grafico::C_Grafico(){
+    //std::string fname(std::tmpnam(NULL));
+}
+
+void C_Grafico::histogram(){
 
 }
-template <typename xtype> void plot::C_Grafico<xtype>::add_point(xtype x, float y){
 
-}
-template <typename xtype> void plot::C_Grafico<xtype>::add_point(xtype x, float y, std::string group){
-
-}
-template <typename xtype> void plot::C_Grafico<xtype>::add_group(std::vector<xtype> x, std::vector<float> y, std::string label){
-
-}
-template <typename xtype> void plot::C_Grafico<xtype>::plot(std::string fname){
+void C_Grafico::histogram(std::string fname){
 
 }
