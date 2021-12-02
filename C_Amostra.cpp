@@ -3,8 +3,11 @@
 #include <iomanip>
 #include "C_Amostra.hpp"
 
+#define MAX_WIDTH 100
+#define N_COLS 7
+
 data::C_Amostra::C_Amostra(data::component_vector components){
-    sample_components = components;
+    C_Amostra_components = components;
     class_names = data::get_classes(components);
     for(auto i : class_names){
         classes[i] = new data::C_Heteroatomica(components, i);
@@ -88,10 +91,44 @@ void data::C_Amostra::print_maturity(std::ostream &output){
     output << "DBE15 da Classe N: " << N.get_DBE(15)->intensity << "\n";
 }
 
-void data::C_Amostra::print_modified(std::ostream &file){
-    int n = sample_components.size();
-    file << "Class\tMol. Formula\tC\tH\tN\tDBE\tIntensity\n";
+
+std::vector<std::string> data::split_line(char *str){
+    std::vector<std::string> output;
+    int last = 0;
+    int i_col = 0;
+    for(int i = 0; str[i] != '\0' && i_col < N_COLS - 1; i++){
+        if(isspace(str[i])){
+            do{
+                i++;
+            }while(isspace(str[i]));
+            output.push_back(std::string(&str[last], (i - 1) - last));
+            i_col++;
+            last = i;
+        }
+    }
+    output.push_back(std::string(&str[last]));
+    return output;
+}
+
+data::component_vector data::read_ifstream(std::ifstream *input){
+    data::component_vector data_vector;
+    char header[MAX_WIDTH];
+    input->getline(header, MAX_WIDTH);
+    while(!input->eof()){
+        char input_line[MAX_WIDTH];
+        input->getline(input_line, MAX_WIDTH);
+        auto input_cols = data::split_line(input_line);
+        if(input_cols.size() == 7){
+            data_vector.push_back(data::C_ComponenteQuimico(input_cols));
+        }
+    }
+    return data_vector;
+}
+
+void data::write_modified(data::component_vector components, std::ofstream *file){
+    int n = components.size();
+    *file << "Class\tMol. Formula\tC\tH\tN\tDBE\tIntensity\n";
     for(int i = 0; i < n; i++){
-        file << sample_components[i].to_line();
+        *file << components[i].to_line();
     }
 }
