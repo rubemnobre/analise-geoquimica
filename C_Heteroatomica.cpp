@@ -24,8 +24,8 @@ data::C_Heteroatomica::C_Heteroatomica(data::component_vector components, std::s
 }
 
 void data::C_Heteroatomica::print_intensity_per_dbe(std::ostream &output){
-    output << "\nAbundancia relativa do DBE na Classe Heteroatomica " << class_name;
-    output << "\nIntensidade total da classe: " << intensity << "\nDBE\tInt. Relativa\n";
+    output << "\n#Abundancia relativa do DBE na Classe Heteroatomica " << class_name;
+    output << "\n#Intensidade total da classe: " << intensity << "\nDBE\tInt. Relativa\n";
     for(auto i : class_dbes){
         output << i.first << '\t' << get_DBE(i.first)->intensity/intensity << '\n';
     }
@@ -50,13 +50,13 @@ data::C_Heteroatomica *data::C_Amostra::get_class(std::string name){
         return classes.at(name);
     }
     catch (const std::out_of_range& oor) {
-        return new data::C_Heteroatomica(C_Amostra_components, name);
+        return new data::C_Heteroatomica(sample_components, name);
     }
 }
 
 
 float data::C_Heteroatomica::C(int dbe, int c){
-    return get_DBE(dbe)->c_intensity[c].x;
+    return get_DBE(dbe)->c_distribution[c];
 }
 
 float data::C_Heteroatomica::sum_C(int dbe, int min, int max, int opt){

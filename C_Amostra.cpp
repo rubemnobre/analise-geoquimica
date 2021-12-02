@@ -30,9 +30,9 @@ data::C_Amostra::C_Amostra(data::component_vector components){
 
 void data::C_Amostra::print_relative_abundancy(std::ostream &output){
     output << std::fixed << std::setprecision(6);
-    output << "\nAbundancia das classes heteroatomicas\n";
-    output << "Intensidade total: " << intensity << "\n";
-    output << "Classe\tInt. Relativa\n";
+    output << "\n#Abundancia das classes heteroatomicas\n";
+    output << "#Intensidade total: " << intensity << "\n";
+    output << "#Classe\tInt. Relativa\n";
     for(auto i : classes){
         output << i.first << '\t' << i.second->intensity/intensity << "\n";
     }

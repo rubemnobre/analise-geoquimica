@@ -9,15 +9,19 @@
 #include "C_Amostra.hpp"
 #include "C_EntradaDeDados.hpp"
 #include "C_SaidaDeDados.hpp"
+#include "C_Grafico.hpp"
 
 void relative_abundancy(data::C_Amostra input, data::C_SaidaDeDados out){
-    auto file = out.new_output("abundancia-relativa");
-    input.print_relative_abundancy(std::cout);
+    auto file = out.new_output("abundancia_relativa");
+    input.print_relative_abundancy(std::cout);  
     input.print_relative_abundancy(file);
+    auto graf = out.new_plot("Abundancia Relativa");
+    input.print_relative_abundancy(graf.data);
+    graf.histogram();
 }
 
 void petrochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
-    auto file = out.new_output("estudo-petroquimico");
+    auto file = out.new_output("estudo_petroquimico");
     int choice = 0;
     while(choice != 3){
         std::cout << "1. Calcular abundancia relativa do DBE por classe\n2. Calcular distribuicao de numeros carbono por DBE\n3.Voltar";
@@ -39,6 +43,9 @@ void petrochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
             
             hclass.print_intensity_per_dbe(std::cout);
             hclass.print_intensity_per_dbe(file);
+            auto graf = out.new_plot(hclass.class_name + " Intensidade por DBE");
+            hclass.print_intensity_per_dbe(graf.data);
+            graf.histogram();
         }
         if(choice == 2){
             int n = input.class_names.size();
@@ -62,12 +69,15 @@ void petrochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
 
             dbe.print_intensity_per_c(std::cout);
             dbe.print_intensity_per_c(file);
+            auto graf = out.new_plot("Classe " + hclass.class_name + " DBE " + std::to_string(dbe.val) + " intensidade por C");
+            dbe.print_intensity_per_c(graf.data);
+            graf.histogram();
         }
     }
 }
 
 void geochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
-    auto file = out.new_output("abundancia-relativa");
+    auto file = out.new_output("estudo_geoquimico");
     std::cout << std::fixed << std::setprecision(6);
     char opt = '0';
     while(opt != '4'){
