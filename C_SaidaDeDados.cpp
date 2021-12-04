@@ -9,7 +9,7 @@ data::C_SaidaDeDados::C_SaidaDeDados(std::string name, std::string folder){
 }
 
 std::ofstream data::C_SaidaDeDados::new_output(std::string name){
-    return std::ofstream(folder_path + "/" + study_name + "_" + name + ".txt", std::ofstream::out | std::ofstream::app);
+    return std::ofstream(folder_path + "/" + study_name + "_" + name + ".txt", std::ofstream::out);
 }
 
 plot::C_Grafico data::C_SaidaDeDados::new_plot(std::string name){
