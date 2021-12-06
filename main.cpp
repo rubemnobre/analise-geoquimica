@@ -65,6 +65,11 @@ void petrochemical_study(data::C_Amostra input, data::C_SaidaDeDados out){
             
             auto hclass = *input.get_class(input.class_names[i_sel]);
 
+            std::cout << "DBEs da classe:\n";
+            for(auto i : hclass.class_dbes){
+                std::cout << i.first << '\n';
+            }
+
             int dbe_sel = 0;
             std::cout << "\nSelecione o DBE para analisar a distribuicao por numero de carbono: ";
             std::cin >> dbe_sel;
@@ -124,6 +129,12 @@ int main(int argc, char **argv){
     std::string study_name;
     std::cin >> study_name;
     auto out = data::C_SaidaDeDados(study_name, "./output");
+    
+    auto file = out.new_output("dados-tratados");
+    file << "Dados tratados: \n";
+    input.print_modified(file);
+    std::cout << "Dados tratados salvos!\n";
+    file.close();
 
     std::cout << std::fixed << std::setprecision(6);
 
@@ -147,10 +158,6 @@ int main(int argc, char **argv){
                 break;
         }
     }
-    auto file = out.new_output("dados-tratados");
-    file << "Dados tratados: \n";
-    input.print_modified(file);
-    std::cout << "Dados tratados salvos!\n";
-    file.close();
+
     return 0;
 }
