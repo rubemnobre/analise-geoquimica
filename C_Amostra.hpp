@@ -1,4 +1,5 @@
 #include <map>
+#include <string>
 #include "C_ComponenteQuimico.hpp"
 #include "C_DBE.hpp"
 #include "C_Heteroatomica.hpp"
@@ -10,6 +11,7 @@ namespace data{
         class C_Amostra{ // Armazena os dados refinados de uma amostra completa
             public:
                 float intensity;
+                std::string name;
                 component_vector sample_components;
                 std::map<std::string, C_Heteroatomica*> classes;
                 std::map<int, C_DBE*> dbes;
