@@ -60,6 +60,6 @@ bool data::C_EntradaDeDados::is_successful(){
     return success;
 }
 
-data::C_Amostra data::C_EntradaDeDados::get_sample(){
-    return data::C_Amostra(components);
+data::C_Amostra* data::C_EntradaDeDados::get_sample(){
+    return new data::C_Amostra(components);
 }

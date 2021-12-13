@@ -1,7 +1,10 @@
 all: geoquim
 
-geoquim: C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o C_EntradaDeDados.o C_DistC.o C_Grafico.o main.o
-	g++ -o geoquim.exe C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o C_EntradaDeDados.o C_DistC.o C_Grafico.o main.o
+geoquim: C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o C_EntradaDeDados.o C_DistC.o C_Grafico.o main.o C_SimuladorTratamentoDados_FT_ICRMS.o
+	g++ -o geoquim.exe C_Amostra.o C_SaidaDeDados.o C_Heteroatomica.o C_DBE.o C_ComponenteQuimico.o C_EntradaDeDados.o C_DistC.o C_Grafico.o main.o C_SimuladorTratamentoDados_FT_ICRMS.o
+
+C_SimuladorTratamentoDados_FT_ICRMS.o: C_SimuladorTratamentoDados_FT_ICRMS.cpp C_SimuladorTratamentoDados_FT_ICRMS.hpp
+	g++ -c C_SimuladorTratamentoDados_FT_ICRMS.cpp
 
 C_Grafico.o: C_Grafico.cpp C_Grafico.hpp
 	g++ -c C_Grafico.cpp

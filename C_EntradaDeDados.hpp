@@ -11,7 +11,7 @@ namespace data{
         public:
             C_EntradaDeDados();
             bool open(std::string fname);
-            C_Amostra get_sample();
+            C_Amostra* get_sample();
             bool is_successful();
             std::string error = "";
         private:
